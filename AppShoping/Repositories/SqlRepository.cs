@@ -1,23 +1,24 @@
-﻿using AppShoping.Entities;
+﻿using AppShoping.Data;
+using AppShoping.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppShoping.Repositories
 {
     public class SqlRepository<T> : IRepository<T> where T : class, IEntity, new()
     {
-        private readonly DbContext _dbContext;
+        private readonly ShopAppDbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
         public event EventHandler<T?>? ItemAdded;
         public event EventHandler<T?>? ProductDeleted;
 
-        public SqlRepository(DbContext dbContext)
+        public SqlRepository(ShopAppDbContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
         }
 
-        public IEnumerable<T> GetAll() => _dbSet.AsNoTracking().ToList();
+        public IEnumerable<T> GetAll() => _dbSet.AsNoTracking();
 
         public T? GetById(int id) => _dbSet.Find(id);
 
